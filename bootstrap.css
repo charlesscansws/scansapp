@@ -1,0 +1,45 @@
+/* Reset default margin and padding */
+body, h1, h2, h3, p {
+    margin: 0;
+    padding: 0;
+}
+
+/* Basic styling for the app container */
+.container {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Style for the input field and button */
+#sheetsUrl {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#populateBtn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+}
+
+/* Alternating row colors */
+.row-even {
+    background-color: #f2f2f2; /* Light gray */
+}
+
+.row-odd {
+    background-color: #ffffff; /* White */
+}
+
+/* Style for the data display section */
+#dataDisplay {
+    margin-top: 20px;
+}
+
+/* Style for header */
+h3 {
+    margin-bottom: 10px;
+}
