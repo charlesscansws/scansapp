@@ -19,32 +19,33 @@
         document.getElementById('populateBtn').addEventListener('click', populateInvoiceSheet);
 
         function populateInvoiceSheet() {
-            const sheetsUrl = document.getElementById('sheetsUrl').value;
-            const sheetsId = extractSheetId(sheetsUrl);
-            if (sheetsId) {
-                const apiKey = 'AIzaSyBzZAAvQ_gmiH20onBHUzm3lc3T8kTghes';
-                const sheetName = '📥 INVOICE';
-                const range = 'B:X'; // Fetch data from columns B to X
+                const sheetsUrl = document.getElementById('sheetsUrl').value;
+                const sheetsId = extractSheetId(sheetsUrl);
+                if (sheetsId) {
+                    const apiKey = 'AIzaSyBzZAAvQ_gmiH20onBHUzm3lc3T8kTghes';
+                    const sheetName = '📥 INVOICE';
 
-                const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetsId}/values/${sheetName}!${range}?key=${apiKey}`;
+                    const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetsId}/values/${sheetName}?key=${apiKey}`;
 
-                fetch(apiUrl)
-                    .then(response => response.json())
-                    .then(data => {
-                        const values = data.values;
-                        // Process and display data
-                        const dataDisplay = document.getElementById('dataDisplay');
-                        dataDisplay.innerHTML = '<h3>Invoice Sheet Data</h3>';
-                        let rowNumber = 0;
-                        values.forEach(row => {
-                            const rowHTML = `<p class="row-${rowNumber % 2 === 0 ? 'even' : 'odd'}"><strong>${row[0]}</strong>: ${row[1]}</p>`;
-                            dataDisplay.innerHTML += rowHTML;
-                            rowNumber++;
-                        });
-                    })
-                    .catch(error => console.error('Error fetching data:', error));
+                    fetch(apiUrl)
+                        .then(response => response.json())
+                        .then(data => {
+                            const values = data.values;
+                            // Filter out columns D to X (indexes 3 to 23)
+                            const filteredValues = values.map(row => row.slice(3, 24));
+                            // Process and display data
+                            const dataDisplay = document.getElementById('dataDisplay');
+                            dataDisplay.innerHTML = '<h3>Invoice Sheet Data</h3>';
+                            let rowNumber = 0;
+                            filteredValues.forEach(row => {
+                                const rowHTML = `<p class="row-${rowNumber % 2 === 0 ? 'even' : 'odd'}"><strong>${row[0]}</strong>: ${row[1]}</p>`;
+                                dataDisplay.innerHTML += rowHTML;
+                                rowNumber++;
+                            });
+                        })
+                        .catch(error => console.error('Error fetching data:', error));
+                }
             }
-        }
 
         function extractSheetId(url) {
             const match = url.match(/\/d\/(.+?)\//);
