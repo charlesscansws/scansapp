@@ -16,23 +16,32 @@
     </div>
 
     <script>
-        document.getElementById('populateBtn').addEventListener('click', () => {
+        document.getElementById('populateBtn').addEventListener('click', populateInvoiceSheet);
+
+        function populateInvoiceSheet() {
             const sheetsUrl = document.getElementById('sheetsUrl').value;
             const sheetsId = extractSheetId(sheetsUrl);
             if (sheetsId) {
-                const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetsId}/values/Sheet1?key=YOUR_GOOGLE_SHEETS_API_KEY`;
+                const apiKey = 'YOUR_GOOGLE_SHEETS_API_KEY';
+                const sheetName = '📥 INVOICE';
+
+                const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetsId}/values/${sheetName}?key=${apiKey}`;
 
                 fetch(apiUrl)
                     .then(response => response.json())
                     .then(data => {
-                        // Process data and display in the interface
                         const values = data.values;
-                        // Update #dataDisplay with your data presentation logic
-                        document.getElementById('dataDisplay').innerHTML = JSON.stringify(values);
+                        // Process and display data
+                        const dataDisplay = document.getElementById('dataDisplay');
+                        dataDisplay.innerHTML = '<h3>Invoice Sheet Data</h3>';
+                        values.forEach(row => {
+                            const rowHTML = `<p><strong>${row[0]}</strong>: ${row[1]}</p>`;
+                            dataDisplay.innerHTML += rowHTML;
+                        });
                     })
                     .catch(error => console.error('Error fetching data:', error));
             }
-        });
+        }
 
         function extractSheetId(url) {
             const match = url.match(/\/d\/(.+?)\//);
